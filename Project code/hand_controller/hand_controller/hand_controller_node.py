@@ -1,0 +1,2 @@
+
+print("Hand controller started")
