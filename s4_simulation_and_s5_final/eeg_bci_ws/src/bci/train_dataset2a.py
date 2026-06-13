@@ -1,6 +1,7 @@
 import mne
 import joblib
 import numpy as np
+import os
 
 from pathlib import Path
 
@@ -12,7 +13,8 @@ from sklearn.metrics import accuracy_score
 from mne.decoding import CSP
 
 
-DATASET = Path.home() / "eeg_robot_ws/datasets/BCI_IV_2a/A01T.gdf"
+DATASET = f"{os.environ['EEG_BCI_DATASETS_DIR']}/BCI_IV_2a/A01T.gdf"
+DATASET_MODEL_NAME="dataset2a_model"
 
 
 def load_subject(filepath):
@@ -107,8 +109,7 @@ def train_model():
     print(f"\nAccuracy = {acc*100:.2f}%")
 
     model_path = (
-        Path.home() /
-        "eeg_robot_ws/dataset2a_model.pkl"
+        f"{os.environ['EEG_BCI_MODELS_DIR']}/{DATASET_MODEL_NAME}.pkl"
     )
 
     joblib.dump(

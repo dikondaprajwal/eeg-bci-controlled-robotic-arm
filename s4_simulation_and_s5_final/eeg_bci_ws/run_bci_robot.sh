@@ -8,17 +8,19 @@ killall -9 ros_gz_bridge rviz2 _ros2_daemon
 # 3. Wipe out hidden temporary and transport cache files
 rm -rf ~/.gazebo/ ~/.gz/ /tmp/gazebo* /tmp/org.gazebosim*
 
+source bci_config.sh
 
-colcon build --build-base artifacts/build --install-base artifacts/install --symlink-install
+
+colcon build --build-base $EEG_BCI_BUILD_DIR --install-base $EEG_BCI_INSTALL_DIR --symlink-install
 source /opt/ros/humble/setup.bash
-source ~/eeg_robot_ws/artifacts/install/setup.bash
+source $EEG_BCI_INSTALL_DIR/setup.bash
 
 
 # =====================================================================
 # ADDED LINE: Automatically train the model and generate dataset2a_model.pkl
 # =====================================================================
 echo "Starting Machine Learning Training with real EEG dataset..."
-python3 src/bci/train_dataset2a.py
+python3 $EEG_BCI_SRC_DIR/bci/train_dataset2a.py
 echo "Training complete! Moving to simulation execution."
 # =====================================================================
 
@@ -29,20 +31,20 @@ gnome-terminal -- bash -c \
 sleep 10
 
 gnome-terminal -- bash -c \
-"source ~/eeg_robot_ws/artifacts/install/setup.bash;
+"source $EEG_BCI_INSTALL_DIR/setup.bash;
 ros2 run eeg_robot_arm_control robot_controller;
 exec bash"
 
 sleep 2
 
 gnome-terminal -- bash -c \
-"source ~/eeg_robot_ws/artifacts/install/setup.bash;
+"source $EEG_BCI_INSTALL_DIR/setup.bash;
 ros2 run eeg_robot_arm_control eeg_predictor_node;
 exec bash"
 
 sleep 2
 
 gnome-terminal -- bash -c \
-"source ~/eeg_robot_ws/artifacts/install/setup.bash;
+"source $EEG_BCI_INSTALL_DIR/setup.bash;
 ros2 run eeg_robot_arm_control eeg_visualizer_node;
 exec bash"

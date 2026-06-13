@@ -1,6 +1,7 @@
 import rclpy
 import joblib
 import mne
+import os
 import numpy as np
 
 from pathlib import Path
@@ -8,14 +9,14 @@ from rclpy.node import Node
 from std_msgs.msg import String
 
 
+DATASET_MODEL_NAME="dataset2a_model"
+
 MODEL_PATH = (
-    Path.home() /
-    "eeg_robot_ws/dataset2a_model.pkl"
+    f"{os.environ['EEG_BCI_MODELS_DIR']}/{DATASET_MODEL_NAME}.pkl"
 )
 
 DATASET_PATH = (
-    Path.home() /
-    "eeg_robot_ws/datasets/BCI_IV_2a/A01T.gdf"
+    f"{os.environ['EEG_BCI_DATASETS_DIR']}/BCI_IV_2a/A01T.gdf"
 )
 
 CLASS_MAP = {
